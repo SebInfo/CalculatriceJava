@@ -14,12 +14,12 @@ public class Calculatrice extends JFrame {
   private static final long serialVersionUID = 1L;
   private JPanel container = new JPanel();
   //Tableau stockant les éléments à afficher dans la calculatrice
-  String[] tab_string = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "=", "C", "+", "-", "*", "/"};
+  String[] tab_string = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "=", "C", "+", "-", "*", "/", "x!"};
   //Un bouton par élément à afficher
   JButton[] tab_button = new JButton[tab_string.length];
   private JLabel ecran = new JLabel();
   private Dimension dim = new Dimension(50, 40);
-  private Dimension dim2 = new Dimension(50, 31);
+  private Dimension dim2 = new Dimension(50, 21);
   private double chiffre1;
   private boolean clicOperateur = false, update = false;
   private String operateur = "";
@@ -90,6 +90,11 @@ public class Calculatrice extends JFrame {
           tab_button[i].setPreferredSize(dim2);
           operateur.add(tab_button[i]);
           break;
+        case 17 :
+          tab_button[i].addActionListener(new FactorielleListener());
+          tab_button[i].setPreferredSize(dim2);
+          operateur.add(tab_button[i]);
+          break;
         default :
           //Par défaut, ce sont les premiers éléments du tableau
           //donc des chiffres, on affecte alors le bon listener
@@ -122,6 +127,16 @@ public class Calculatrice extends JFrame {
             Double.valueOf(ecran.getText()).doubleValue();
       ecran.setText(String.valueOf(chiffre1));
     }     
+    
+    if(operateur.equals("!")){
+    	int fact=1;
+    	for(int i=1; i <= chiffre1; i++){ 
+    	      fact = fact * i;  
+    	    } 
+    	chiffre1=fact;
+        ecran.setText(String.valueOf(chiffre1));
+    }
+    
     if(operateur.equals("/")){
       try{
         chiffre1 = chiffre1 / 
@@ -149,6 +164,8 @@ public class Calculatrice extends JFrame {
       ecran.setText(str);
     }
   }
+  
+  
 
   //Listener affecté au bouton =
   class EgalListener implements ActionListener {
@@ -223,6 +240,16 @@ public class Calculatrice extends JFrame {
     }
   }
 
+  //Listener affecté au bouton x!
+  class FactorielleListener implements ActionListener {
+    public void actionPerformed(ActionEvent arg0){
+    	chiffre1 = Double.valueOf(ecran.getText()).doubleValue();
+        operateur = "!";
+        calcul();
+        update = true;
+        clicOperateur = false;
+    }
+  }
   //Listener affecté au bouton de remise à zéro
   class ResetListener implements ActionListener {
     public void actionPerformed(ActionEvent arg0){
